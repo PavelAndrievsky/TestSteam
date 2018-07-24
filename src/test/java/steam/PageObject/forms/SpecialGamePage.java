@@ -15,18 +15,13 @@ public class SpecialGamePage extends BasePage {
     private Label discountLabel;
     private Label priceLabel;
 
-    private String installButtonLocatorKey = "//a[@class='header_installsteam_btn_content']";
-    private String discountLocatorExpected = "//div[@class='discount_pct']";
-    private String finalPriceLocatorKey = "//div[@class='discount_prices']";
-
     public SpecialGamePage() {
     }
 
     public boolean isSimilarPriceDiscount(List<String> list) {
-
-        Browser.waitElementsExplicide(discountLocatorExpected);
-        discountLabel = new Label(By.xpath(discountLocatorExpected));
-        priceLabel = new Label(By.xpath(finalPriceLocatorKey));
+        Browser.waitElementsExplicide("//div[@class='discount_pct']");
+        discountLabel = new Label(By.xpath("//div[@class='discount_pct']"));
+        priceLabel = new Label(By.xpath("//div[@class='discount_prices']"));
         List<String> comparing = new ArrayList<>();
         comparing.add(discountLabel.getText());
         comparing.add(priceLabel.getText().split(" ")[0]);
@@ -35,9 +30,8 @@ public class SpecialGamePage extends BasePage {
     }
 
     public void clickOnInstall()  {
-        Browser.waitElementsExplicide(installButtonLocatorKey);
-        String str = new String(installButtonLocatorKey);
-        buttonInstall = new Button(By.xpath(str));
+        Browser.waitElementsExplicide("//a[@class='header_installsteam_btn_content']");
+        buttonInstall = new Button(By.xpath("//a[@class='header_installsteam_btn_content']"));
         buttonInstall.click();
     }
 

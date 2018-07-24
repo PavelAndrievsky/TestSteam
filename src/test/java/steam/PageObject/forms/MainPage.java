@@ -12,17 +12,12 @@ import steam.PageObject.menu.MainMenu;
 
 public class MainPage extends BasePage {
 
-    private Select selGamesmenu;
+    private Select selGamesMenu;
     private Select selAction;
     private Select languageSelect;
-    private Select reallanguageSelect;
 
     private static final String languageProperties = "%s.properties";
     private static final String configLanguage = "localization/%s";
-    private String gamesMenuLocatorKey = "//*[@id='genre_tab']/span/a";
-    private String actionLocatorKey = "//a[@class='popup_menu_item' and contains(text(),'%s')]";
-    private String languageLocatorKey = "//span[@id='language_pulldown']";
-    private String russionOptionLocatorKey = "//a[@href='?l=%s']";
 
     public MainMenu mainMenu = new MainMenu();
 
@@ -32,25 +27,25 @@ public class MainPage extends BasePage {
     public void moveToGamesMenu() {
         Browser.waitImplicit();
         Browser.waitPageLoad();
-        selGamesmenu = new Select(By.xpath(gamesMenuLocatorKey));
-        selGamesmenu.moveTo();
+        selGamesMenu = new Select(By.xpath("//*[@id='genre_tab']/span/a"));
+        selGamesMenu.moveTo();
     }
 
     public void changeLanguage() throws UnsupportedEncodingException {
 
         String language = configFile.getConfigProperty("language");
-        String locat = languageLocatorKey;
-        languageSelect = new Select(By.xpath(locat));
+        languageSelect = new Select(By.xpath("//span[@id='language_pulldown']"));
         String lang = languageSelect.getText();
 
         if ((language.equals("ru") && !lang.equals("язык")) || (language.equals("en") && !lang.equals("language"))) {
             String filename = String.format(languageProperties, language);
             ConfigFileReader configLan = new ConfigFileReader(String.format(configLanguage, filename));
             String locator = new String(configLan.getConfigProperty("lang").getBytes("ISO-8859-1"), "UTF-8");
-            locator = String.format(russionOptionLocatorKey, locator);
+            locator = String.format("//a[@href='?l=%s']", locator);
             languageSelect.click();
-            reallanguageSelect = new Select(By.xpath(locator));
-            reallanguageSelect.clickAndWait();
+            Select realLanguageSelect = new Select(By.xpath(locator));
+            realLanguageSelect.clickAndWait();
+            Browser.waitPageLoad();
         }
 
     }
@@ -58,10 +53,12 @@ public class MainPage extends BasePage {
     public void clickActionMenu(String id) {
         String locator = null;
         try {
+            String actionLocatorKey = "//a[@class='popup_menu_item' and contains(text(),'%s')]";
             locator = new String(actionLocatorKey.getBytes("ISO-8859-1"), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        assert locator != null;
         selAction = new Select(By.xpath(String.format(locator, id)));
         selAction.click();
     }

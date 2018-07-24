@@ -9,15 +9,13 @@ import org.openqa.selenium.By;
 
 public class DownloadSteamPage extends BasePage {
 
-    private static final String locator = "//div[@id='about_greeting_ctn']//*//a[@id='about_install_steam_link']";
-
     private static final String downloadFile = "src/test/resources/SteamSetup.exe";
 
     private Button btnDownload;
     public DownloadSteamPage() {}
 
     public boolean checkFullDownload() {
-        btnDownload = new Button(By.xpath((locator)));
+        btnDownload = new Button(By.xpath(("//div[@id='about_greeting_ctn']//*//a[@id='about_install_steam_link']")));
         String link =  btnDownload.getAttribute("href");
         String filePath = downloadFile;
         CommonFunctions commonFunctions = new CommonFunctions();
