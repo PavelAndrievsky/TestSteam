@@ -29,7 +29,8 @@ public class Browser extends BaseEntity {
     private static final String chromeDriverPath = "./src/test/resources/chromedriver";
     private static final String geckoDriverPath = "./src/test/resources/geckodriver";
 
-
+    private static String browser = getParameter("browser");
+    
     private static String downloadPath;
 
     static {
@@ -39,7 +40,18 @@ public class Browser extends BaseEntity {
             e.printStackTrace();
         }
     }
+    
+    private static String getParameter(String name) {
+        String value = System.getProperty(name);
+        if (value == null)
+            throw new RuntimeException(name + " is not a parameter!");
 
+        if (value.isEmpty())
+            throw new RuntimeException(name + " is empty!");
+
+        return value;
+    }
+    
     private Browser(){}
 
     public static Browser getInstance() {
@@ -70,7 +82,7 @@ public class Browser extends BaseEntity {
             case "linux":
                 break;
         }
-        switch (configFile.getConfigProperty("browser")) {
+        switch (browser) {
             case "chrome":
                 System.setProperty("webdriver.chrome.driver", pathChrome);
                 driver = new ChromeDriver(setChromeCapabilities());
